@@ -45,6 +45,9 @@ export default function Sell(){
                     </input>
 
                 </div>
+                <div className="mb-4">
+                    Choose image of the property
+                </div>
                 <div className="form-group form-check mb-6">
                     <input
                     type="file"

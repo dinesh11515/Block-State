@@ -2,19 +2,18 @@ const hre = require("hardhat");
 
 async function main() {
   
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Greeter = await hre.ethers.getContractFactory("RentableNFT");
+  const greeter = await Greeter.deploy();
 
   await greeter.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("Contract deployed to:", greeter.address);
 
   console.log("Sleeping ...");
   await sleep(60000);
 
   await hre.run("verify:verify",{
     address : greeter.address,
-    constructorArguments : ["Hello, Hardhat!"],
   })
 }
 
@@ -28,4 +27,4 @@ main()
   .catch((error) => {
     console.error(error);
     process.exit(1);
-  });
+});
