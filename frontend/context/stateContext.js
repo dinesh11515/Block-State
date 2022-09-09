@@ -1,7 +1,7 @@
 import {createContext,useState} from 'react';
 import NavBar from '../components/Navbar';
 import {ethers} from 'ethers';
-import {abi} from "../artifacts/contracts/RentableNFT.sol/RentableNFT.json";
+import {abi} from "../artifacts/contracts/RentableNFT.sol/RentableNFTMarketplace.json";
 export const stateContext = createContext();
 
 export default function Layout({children}){

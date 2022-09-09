@@ -23,8 +23,8 @@ contract RentableNFTMarketplace is ERC4907 {
       address payable seller;
       address payable owner;
       uint256 price;
-      uint256 rentPrice,
-      bool forRent,
+      uint256 rentPrice;
+      bool forRent;
       bool sold;
     }
 
@@ -59,11 +59,12 @@ contract RentableNFTMarketplace is ERC4907 {
       return listingPrice;
     }
 
-    function createToken(string memory tokenURI, uint256 price,uint256 rent_price,bool forRent) public payable {
+    function createToken(string memory _tokenURI, uint256 price,uint256 rent_price,bool forRent,bool member) public payable {
+      require(member || msg.value == listingPrice, "Price must be equal to listing price");
       _tokenIds.increment();
       uint256 newTokenId = _tokenIds.current();
       _mint(msg.sender, newTokenId);
-      _setTokenURI(newTokenId, tokenURI);
+      tokenURIs[newTokenId] = _tokenURI;
       createMarketItem(newTokenId, price, rent_price , forRent);
     }
 
@@ -75,14 +76,13 @@ contract RentableNFTMarketplace is ERC4907 {
     ) private {
       require(price > 0, "Price must be at least 1 wei");
       require(!forRent || rent_price > 0, "Rent price must be at least 1 wei");
-      require(msg.value == listingPrice, "Price must be equal to listing price");
 
       idToMarketItem[tokenId] =  MarketItem(
         tokenId,
         payable(msg.sender),
         payable(address(this)),
         price,
-        rent_price
+        rent_price,
         false,
         forRent
       );
@@ -132,20 +132,21 @@ contract RentableNFTMarketplace is ERC4907 {
     function rentOutToken(
         uint256 _tokenId,
         uint64 _expires
-    ) public{
-        uint rentPrice = idToMarketItem[tokenId].rentPrice;
+    ) public payable{
+        require(idToMarketItem[_tokenId].forRent, "Token was already rented");
+        uint rentPrice = idToMarketItem[_tokenId].rentPrice;
         require(msg.value > rentPrice,"pay the rent price showing in the order");
         _setUser(_tokenId, msg.sender, _expires);
     }
 
     function updateRentPrice(uint256 _tokenId,uint256 rent_price) public{
-        require(idToMarketItem[tokenId].seller == msg.sender, "Only item owner can perform this operation");
-        idToMarketItem[tokenId].rentPrice = rent_price;
+        require(idToMarketItem[_tokenId].seller == msg.sender, "Only item owner can perform this operation");
+        idToMarketItem[_tokenId].rentPrice = rent_price;
     }
 
     function updatePrice(uint256 _tokenId,uint256 price) public{
-        require(idToMarketItem[tokenId].seller == msg.sender, "Only item owner can perform this operation");
-        idToMarketItem[tokenId].price = price;
+        require(idToMarketItem[_tokenId].seller == msg.sender, "Only item owner can perform this operation");
+        idToMarketItem[_tokenId].price = price;
     }
 
     function fetchMarketItems() public view returns (MarketItem[] memory) {
