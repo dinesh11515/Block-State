@@ -18,10 +18,4 @@ module.exports = {
       polygonMumbai: POLYGONSCAN_KEY,
     },
   },
-  paths: {
-    sources: "./contracts",
-    tests: "./test",
-    cache: "./cache",
-    artifacts: "./frontend/artifacts"
-  },
 };

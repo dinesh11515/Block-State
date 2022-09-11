@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 async function main() {
   
-  const Greeter = await hre.ethers.getContractFactory("RentableNFT");
+  const Greeter = await hre.ethers.getContractFactory("RentableNFTMarketplace");
   const greeter = await Greeter.deploy();
 
   await greeter.deployed();

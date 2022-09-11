@@ -1,7 +1,7 @@
 import {createContext,useState} from 'react';
 import NavBar from '../components/Navbar';
 import {ethers} from 'ethers';
-import {abi} from "../artifacts/contracts/RentableNFT.sol/RentableNFTMarketplace.json";
+import {abi,contract_address} from "../constants/index";
 export const stateContext = createContext();
 
 export default function Layout({children}){
@@ -11,16 +11,36 @@ export default function Layout({children}){
     const [contract,setContract] = useState(null);
     const [account,setAccount] = useState(null);
     
+    const networks = {
+        mumbai: {
+          chainId: `0x${Number(80001).toString(16)}`,
+          chainName: "Mumbai Testnet",
+          nativeCurrency: {
+            name: "MATIC",
+            symbol: "MATIC",
+            decimals: 18
+          },
+          rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+          blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
+        }
+    }
     const connectWallet = async () => {
         try{
             const provider = new ethers.providers.Web3Provider(window.ethereum);           
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner(account);
             if(await signer.getChainId() != 80001){
-                throw new Error("Please connect to the Mumbai testnet network");
+                await window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [
+                        {
+                            ...networks["mumbai"]
+                        }
+                    ]
+                })
             }
             setProvider(signer);
-            setContract(new ethers.Contract("0x95e16bCc6AD0b09CF84CeE50c39277D48C811830",abi["abi"],signer));
+            setContract(new ethers.Contract(contract_address,abi,signer));
             setAccount(await signer.getAddress())
             setConnected(true);
         }
@@ -29,10 +49,6 @@ export default function Layout({children}){
         }
     }
     const disconnect = async() => {
-        if(provider.close) {
-            await provider.close();
-            await web3Modal.clearCachedProvider();
-          }
         setConnected(false);
         setProvider(null);
         setContract(null);

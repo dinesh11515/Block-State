@@ -8,15 +8,15 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract RentableNFTMarketplace is ERC4907 {
 
     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
-    Counters.Counter private _itemsSold;
+    Counters.Counter public _tokenIds;
+    Counters.Counter public _itemsSold;
     mapping(uint256 => string) public tokenURIs;
 
 
     uint256 listingPrice = 1 ether;
     address payable owner;
 
-    mapping(uint256 => MarketItem) private idToMarketItem;
+    mapping(uint256 => MarketItem) public idToMarketItem;
 
     struct MarketItem {
       uint256 tokenId;
@@ -25,6 +25,7 @@ contract RentableNFTMarketplace is ERC4907 {
       uint256 price;
       uint256 rentPrice;
       bool forRent;
+      bool forSale;
       bool sold;
     }
 
@@ -35,6 +36,7 @@ contract RentableNFTMarketplace is ERC4907 {
       uint256 price,
       uint256 rentPrice,
       bool forRent,
+      bool forSale,
       bool sold
     );
 
@@ -59,20 +61,21 @@ contract RentableNFTMarketplace is ERC4907 {
       return listingPrice;
     }
 
-    function createToken(string memory _tokenURI, uint256 price,uint256 rent_price,bool forRent,bool member) public payable {
+    function createToken(string memory _tokenURI, uint256 price,uint256 rent_price,bool forRent,bool forSale,bool member) public payable {
       require(member || msg.value == listingPrice, "Price must be equal to listing price");
       _tokenIds.increment();
       uint256 newTokenId = _tokenIds.current();
       _mint(msg.sender, newTokenId);
       tokenURIs[newTokenId] = _tokenURI;
-      createMarketItem(newTokenId, price, rent_price , forRent);
+      createMarketItem(newTokenId, price, rent_price , forRent,forSale);
     }
 
     function createMarketItem(
       uint256 tokenId,
       uint256 price,
       uint256 rent_price,
-      bool forRent
+      bool forRent,
+      bool forSale
     ) private {
       require(price > 0, "Price must be at least 1 wei");
       require(!forRent || rent_price > 0, "Rent price must be at least 1 wei");
@@ -83,8 +86,9 @@ contract RentableNFTMarketplace is ERC4907 {
         payable(address(this)),
         price,
         rent_price,
-        false,
-        forRent
+        forRent,
+        forSale,
+        false
       );
 
       _transfer(msg.sender, address(this), tokenId);
@@ -95,20 +99,22 @@ contract RentableNFTMarketplace is ERC4907 {
         address(this),
         price,
         rent_price,
-        false,
-        forRent
+        forRent,
+        forSale,
+        false
       );
     }
 
-    function resellToken(uint256 tokenId, uint256 price,uint256 rent_price,bool forRent) public payable {
+    function resellToken(uint256 tokenId, uint256 price,uint256 rent_price,bool forRent,bool forSale,bool member) public payable {
       require(idToMarketItem[tokenId].owner == msg.sender, "Only item owner can perform this operation");
-      require(msg.value == listingPrice, "Price must be equal to listing price");
+      require(member || msg.value == listingPrice, "Price must be equal to listing price");
       idToMarketItem[tokenId].sold = false;
       idToMarketItem[tokenId].price = price;
       idToMarketItem[tokenId].seller = payable(msg.sender);
       idToMarketItem[tokenId].owner = payable(address(this));
       idToMarketItem[tokenId].rentPrice = rent_price;
       idToMarketItem[tokenId].forRent = forRent;
+      idToMarketItem[tokenId].forSale = forSale;
       _itemsSold.decrement();
 
       _transfer(msg.sender, address(this), tokenId);
@@ -119,7 +125,7 @@ contract RentableNFTMarketplace is ERC4907 {
       ) public payable {
       uint price = idToMarketItem[tokenId].price;
       address seller = idToMarketItem[tokenId].seller;
-      require(msg.value == price, "Please pay the asking price in order to complete the purchase");
+      require(msg.value >= price, "Please pay the asking price in order to complete the purchase");
       idToMarketItem[tokenId].owner = payable(msg.sender);
       idToMarketItem[tokenId].sold = true;
       idToMarketItem[tokenId].seller = payable(address(0));
@@ -133,9 +139,10 @@ contract RentableNFTMarketplace is ERC4907 {
         uint256 _tokenId,
         uint64 _expires
     ) public payable{
-        require(idToMarketItem[_tokenId].forRent, "Token was already rented");
+        require(idToMarketItem[_tokenId].forRent, "Token was not for renting");
+        require(userOf(_tokenId) == address(0), "Token is already rented");
         uint rentPrice = idToMarketItem[_tokenId].rentPrice;
-        require(msg.value > rentPrice,"pay the rent price showing in the order");
+        require(msg.value >= rentPrice,"pay the rent price showing in the order");
         _setUser(_tokenId, msg.sender, _expires);
     }
 
