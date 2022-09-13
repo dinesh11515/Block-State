@@ -5,7 +5,17 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      navbar : ['Lobster'],
+    },
+    extend: {
+      colors: {
+        'regal-green': '#157c79',
+      },
+      spacing: {
+        '128': '32rem',
+      }
+    },
   },
   plugins: [],
 }
