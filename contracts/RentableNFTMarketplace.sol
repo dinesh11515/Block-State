@@ -3,9 +3,11 @@ pragma solidity ^0.8.4;
 
 import "./ERC4907.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "usingtellor/contracts/UsingTellor.sol";
 
 
-contract RentableNFTMarketplace is ERC4907 {
+
+contract RentableNFTMarketplace is ERC4907, UsingTellor{
 
     using Counters for Counters.Counter;
     Counters.Counter public _tokenIds;
@@ -14,7 +16,8 @@ contract RentableNFTMarketplace is ERC4907 {
 
 
     uint256 listingPrice = 1 ether;
-    address payable owner;
+    address payable public owner;
+    address payable _tellorAddress = payable(0x840c23e39F9D029fFa888F47069aA6864f0401D7);
 
     mapping(uint256 => MarketItem) public idToMarketItem;
 
@@ -48,12 +51,23 @@ contract RentableNFTMarketplace is ERC4907 {
         _;
     }
 
-    constructor() ERC4907("RentableNFT", "RNT"){
+    constructor() ERC4907("Rentable", "RT") UsingTellor(_tellorAddress){
         owner = payable(msg.sender);
     }
 
+    function getMaticSpotPrice() external view returns(uint256) {
+    
+      bytes memory _queryData = abi.encode("SpotPrice", abi.encode("matic", "usd"));
+      bytes32 _queryId = keccak256(_queryData);
+      
+      (bool ifRetrieve, bytes memory _value, ) =
+          getDataBefore(_queryId, block.timestamp - 1 hours);
+      if (!ifRetrieve) return 0;
+      return abi.decode(_value, (uint256));
+    }
+
     function updateListingPrice(uint _listingPrice) public payable {
-      require(owner == msg.sender, "Only marketplace owner can update listing price.");
+      require(owner == msg.sender, "owner");
       listingPrice = _listingPrice;
     }
 
@@ -77,8 +91,8 @@ contract RentableNFTMarketplace is ERC4907 {
       bool forRent,
       bool forSale
     ) private {
-      require(price > 0, "Price must be at least 1 wei");
-      require(!forRent || rent_price > 0, "Rent price must be at least 1 wei");
+      require(price > 0, "price required");
+      require(!forRent || rent_price > 0, "rent price required");
 
       idToMarketItem[tokenId] =  MarketItem(
         tokenId,
@@ -142,7 +156,7 @@ contract RentableNFTMarketplace is ERC4907 {
         require(idToMarketItem[_tokenId].forRent, "Token was not for renting");
         require(userOf(_tokenId) == address(0), "Token is already rented");
         uint rentPrice = idToMarketItem[_tokenId].rentPrice;
-        require(msg.value >= rentPrice,"pay the rent price showing in the order");
+        require(msg.value >= rentPrice,"pay the rent price");
         _setUser(_tokenId, msg.sender, _expires);
     }
 
@@ -156,76 +170,13 @@ contract RentableNFTMarketplace is ERC4907 {
         idToMarketItem[_tokenId].price = price;
     }
 
-    function fetchMarketItems() public view returns (MarketItem[] memory) {
-      uint itemCount = _tokenIds.current();
-      uint unsoldItemCount = _tokenIds.current() - _itemsSold.current();
-      uint currentIndex = 0;
-
-      MarketItem[] memory items = new MarketItem[](unsoldItemCount);
-      for (uint i = 0; i < itemCount; i++) {
-        if (idToMarketItem[i + 1].owner == address(this)) {
-          uint currentId = i + 1;
-          MarketItem storage currentItem = idToMarketItem[currentId];
-          items[currentIndex] = currentItem;
-          currentIndex += 1;
-        }
-      }
-      return items;
-    }
-
-    function fetchMyNFTs() public view returns (MarketItem[] memory) {
-      uint totalItemCount = _tokenIds.current();
-      uint itemCount = 0;
-      uint currentIndex = 0;
-
-      for (uint i = 0; i < totalItemCount; i++) {
-        if (idToMarketItem[i + 1].owner == msg.sender) {
-          itemCount += 1;
-        }
-      }
-
-      MarketItem[] memory items = new MarketItem[](itemCount);
-      for (uint i = 0; i < totalItemCount; i++) {
-        if (idToMarketItem[i + 1].owner == msg.sender) {
-          uint currentId = i + 1;
-          MarketItem storage currentItem = idToMarketItem[currentId];
-          items[currentIndex] = currentItem;
-          currentIndex += 1;
-        }
-      }
-      return items;
-    }
-
-    function fetchItemsListed() public view returns (MarketItem[] memory) {
-      uint totalItemCount = _tokenIds.current();
-      uint itemCount = 0;
-      uint currentIndex = 0;
-
-      for (uint i = 0; i < totalItemCount; i++) {
-        if (idToMarketItem[i + 1].seller == msg.sender) {
-          itemCount += 1;
-        }
-      }
-
-      MarketItem[] memory items = new MarketItem[](itemCount);
-      for (uint i = 0; i < totalItemCount; i++) {
-        if (idToMarketItem[i + 1].seller == msg.sender) {
-          uint currentId = i + 1;
-          MarketItem storage currentItem = idToMarketItem[currentId];
-          items[currentIndex] = currentItem;
-          currentIndex += 1;
-        }
-      }
-      return items;
-    }
-
     function tokenURI(uint256 _tokenId)
         public
         view
         override
         returns (string memory)
     {
-        return tokenURIs[_tokenId];
+        return string(abi.encodePacked(tokenURIs[_tokenId],"/metadata.json"));
     }
 
 }

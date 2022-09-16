@@ -1,86 +1,108 @@
 import NftCard from "../components/nftCard"
 import NftDetails from "../components/nftDetails"
-import { useState } from "react"
+import { connect } from "@tableland/sdk";
+import { useEffect, useState } from "react"
 export default function Buy(){
     const [selected,setSelected] = useState(null);
-    const data = [
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
-        {
-            name: "House",
-            price: "1000",
-            description: "This is a house",
-            details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-            location: "Mumbai"
-        },
+    // const data = [
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
+    //     {
+    //         name: "House",
+    //         price: "1000",
+    //         description: "This is a house",
+    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
+    //         location: "Mumbai"
+    //     },
 
-    ]
-
+    // ]
+    const [data,setData] = useState([]);
     const clickSelect = (item) => {
         setSelected(item);
     }
 
+    const closeSelect = () => {
+        setSelected(null);
+    }
+
+    const getData = async() => {
+        try{
+            const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
+            const table_name = "blockstate_80001_1967"
+            const readRes = await tableland.read(`SELECT * FROM ${table_name};`);
+            console.log(readRes);
+            setData(readRes["rows"]);
+        }
+
+        catch(err){
+            alert(err);
+        }
+    }
+    
+    useEffect(() => {
+        getData();
+    },[])
 
     return(
         
             selected === null ?
             
-            <div className="grid grid-cols-4 gap-2 px-40 bg-black text-white pt-28">
+            <div className="grid grid-cols-4 gap-2 px-40 text-white mt-4">
                 {data.map((item) => {
-                    return(<NftCard key={item.name} item={item} name={item.name} price={item.price} description={item.description} location={item.location} clickSelect={clickSelect}/>)})}
+                    return(<NftCard key={item.id} item={item} name={item[1]} price={item[2]} details={item[5]} location={item[6]} image ={item[7]} clickSelect={clickSelect}/>)})}
             </div>
             
             :
 
-            <div className="pt-28 px-40 bg-black h-screen">
-                <NftDetails name={selected.name} price={selected.price} description={selected.description} details={selected.details} location={selected.location}/>
+            <div className="">
+                <NftDetails id={selected[0]} name={selected[1]} price={selected[2]} rentPrice={selected[3]} description={selected[4]} details={selected[5]} location={selected[6]} image ={selected[7]} closeSelect ={closeSelect}/>
             </div>
 
         
