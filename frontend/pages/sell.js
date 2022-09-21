@@ -6,7 +6,8 @@ import { stateContext } from "../context/stateContext";
 import { Web3Storage } from "web3.storage";
 import { MdTableView } from "react-icons/md";
 import { ethers } from "ethers";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Sell(){
     const [rent,setRent] = useState(false);
     const [sell,setSell] = useState(false);
@@ -16,8 +17,9 @@ export default function Sell(){
     const [price, setPrice] = useState(0);
     const [rentPrice, setRentPrice] = useState(0);
     const [details, setDetails] = useState("");
-    const [address, setAddress] = useState("");
+    const [location, setLocation] = useState("");
     const [url,setUrl] = useState("");
+    const sold = false;
     const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
     const {contract,connectWallet, connected,account} = useContext(stateContext);
     const web3storage_key = process.env.NEXT_PUBLIC_WEB3_STORAGE_KEY;
@@ -26,29 +28,60 @@ export default function Sell(){
 
 
     const storeImage = async () => {
-        const client = new Web3Storage({ token: web3storage_key });
-        const cid = await client.put([img]);
-        const img_url = ("https://gateway.pinata.cloud/ipfs/"+cid+"/"+img.name);
-        return img_url
+        try{
+            const client = new Web3Storage({ token: web3storage_key });
+            const cid = await client.put([img]);
+            const img_url = ("https://gateway.pinata.cloud/ipfs/"+cid+"/"+img.name);
+            return img_url
+        }
+        catch(err){
+            alert(err);
+        }
     };
 
     const StoreMetadata = async () => {
-        const nft = {
-            image: img,
-            name: name,
-            description: description,
-            price : price,
-            rentPrice : rentPrice,
-            details : details,
-            address : address,
-            rent : rent,
-            sell : sell
-        };
-        const client = new NFTStorage({ token: NFT_STORAGE_KEY });
-        const metadata = await client.store(nft);
-        console.log(metadata);
-        return metadata;
+        try{
+            const nft = {
+                image: img,
+                name: name,
+                description: description,
+                price : price,
+                rentPrice : rentPrice,
+                details : details,
+                location : location,
+                rent : rent,
+                sell : sell
+            };
+            const client = new NFTStorage({ token: NFT_STORAGE_KEY });
+            const metadata = await client.store(nft);
+            return metadata;
+        }
+        catch(err){
+            alert(err);
+        }
     };
+    const UploadDataIntoTableland = async (id,img_url) => {
+        try{
+            const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
+            await tableland.siwe();
+    
+            // const table_name = await tableland.create(
+            // `id integer, name text,price integer,rentPrice integer, description text, details text, location text,image text,rent text,sale text,sold text,owner text, primary key (id)`,
+            // {
+            //     prefix: `blockstate`
+            // }
+            // );
+
+            // console.log(table_name);
+            
+            const table_name = "blockstate_80001_2361";
+            const writeRes = await tableland.write(`INSERT INTO ${table_name} VALUES ('${id}','${name}','${price}','${rentPrice}','${description}','${details}','${location}','${img_url}','${rent}','${sell}','${sold}','${account}');`);
+            
+        }
+        catch(err){
+            alert(err);
+        }
+    }    
 
     
     const upload = async () => {
@@ -64,6 +97,7 @@ export default function Sell(){
             const tx = await contract.createToken(metadata.ipnft,price,rentPrice,sell,rent,true);
             await tx.wait();
             setMsg("Registered Successfully");
+            toast.success("Registered Successfully");
         } catch (err) {
           alert(err.message);
           setMsg("REGISTER PROPERTY");
@@ -71,26 +105,7 @@ export default function Sell(){
     };
 
 
-    const UploadDataIntoTableland = async (id,img_url) => {
-        try{
-            const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            // await tableland.siwe();
     
-            // const data = await tableland.create(
-            // `id integer, name text,price integer,rentPrice integer, description text, details text, address text,image text,rent text,sale text,owner text, primary key (id)`,
-            // {
-            //     prefix: `blockstate`
-            // }
-            // );
-            // add sold and owner in tableland
-            const table_name = "blockstate_80001_1967";
-            const writeRes = await tableland.write(`INSERT INTO ${table_name} VALUES ('${id}','${name}','${price}','${rentPrice}','${description}','${details}','${address}','${img_url}','${rent}','${sell}');`);
-            
-        }
-        catch(err){
-            alert(err);
-        }
-    }    
     return(
         <div className="mt-4">
             <div className="block m-auto rounded-lg shadow-lg bg-black text-white max-w-xl">
@@ -209,8 +224,8 @@ export default function Sell(){
                             ease-in-out
                             m-0
                             focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleInput125"
-                            placeholder="Address"
-                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Location"
+                            onChange={(e) => setLocation(e.target.value)}
                             >
                         </input>
                     </div>
@@ -301,6 +316,7 @@ export default function Sell(){
                             onClick={connectWallet}>Connect wallet</button>
                     }
             </div>
+            <ToastContainer />
         </div>
         
     )

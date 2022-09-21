@@ -1,4 +1,4 @@
-export const abi = [
+export const abi =  [
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -967,4 +967,93 @@ export const abi = [
   }
 ]
 
-export const contract_address = "0xb384a435101C2dE7E9842013f651d2baE9A52e8A"
+export const contract_address = "0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71"
+
+export const airdrop_contract = "0xD4138052BB613b7DD0ECe6559b6A820F0119C699"
+
+export const airdrop_abi = [
+  {
+    "inputs": [
+      {
+        "internalType": "contract IWorldID",
+        "name": "_worldId",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidNullifier",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "count",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNftsLeft",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "nftOwner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "root",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nullifierHash",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[8]",
+        "name": "proof",
+        "type": "uint256[8]"
+      }
+    ],
+    "name": "verify",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

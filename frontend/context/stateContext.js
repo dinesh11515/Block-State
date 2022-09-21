@@ -90,6 +90,7 @@ export default function Layout({children}){
             account,
             connectWallet,
             disconnect,
+            provider,
             owner
         }}>
             <NavBar />

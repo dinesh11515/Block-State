@@ -1,17 +1,16 @@
-import { ethers } from 'hardhat'
+const hre = require("hardhat");
+
 
 async function main() {
-    const worldIDAddress = await fetch('https://developer.worldcoin.org/api/v1/contracts')
-        .then(res => res.json())
-        .then(res => res.find(({ key }) => key === 'staging.semaphore.wld.eth').value)
-    console.log('WorldID address:', worldIDAddress)
+    const worldIDAddress = "0xABB70f7F39035586Da57B3c8136035f87AC0d2Aa"
 
-    // const ContractFactory = await ethers.getContractFactory('Contract')
-    // const contract = await ContractFactory.deploy(worldIDAddress)
 
-    // await contract.deployed()
+    const ContractFactory = await hre.ethers.getContractFactory('earlyAdoptersClaim')
+    const contract = await ContractFactory.deploy(worldIDAddress)
 
-    // console.log('Contract deployed to:', contract.address)
+    await contract.deployed()
+
+    console.log('Contract deployed to:', contract.address)
 }
 
 main().catch(error => {

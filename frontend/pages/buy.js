@@ -4,66 +4,8 @@ import { connect } from "@tableland/sdk";
 import { useEffect, useState } from "react"
 export default function Buy(){
     const [selected,setSelected] = useState(null);
-    // const data = [
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-    //     {
-    //         name: "House",
-    //         price: "1000",
-    //         description: "This is a house",
-    //         details : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam adipisci cupiditate officia, nostrum et deleniti vero corrupti facilis minima laborum nesciunt nulla error natus saepe illum quasi ratione suscipit tempore dolores. Recusandae, similique modi voluptates dolore repellat eum earum sint.",
-    //         location: "Mumbai"
-    //     },
-
-    // ]
     const [data,setData] = useState([]);
+
     const clickSelect = (item) => {
         setSelected(item);
     }
@@ -75,9 +17,8 @@ export default function Buy(){
     const getData = async() => {
         try{
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_1967"
-            const readRes = await tableland.read(`SELECT * FROM ${table_name};`);
-            console.log(readRes);
+            const table_name = "blockstate_80001_2361"
+            const readRes = await tableland.read(`SELECT * FROM ${table_name} WHERE sale = "true";`);
             setData(readRes["rows"]);
         }
 
@@ -89,7 +30,7 @@ export default function Buy(){
     useEffect(() => {
         getData();
     },[])
-
+    console.log(data)
     return(
         
             selected === null ?
@@ -102,7 +43,7 @@ export default function Buy(){
             :
 
             <div className="">
-                <NftDetails id={selected[0]} name={selected[1]} price={selected[2]} rentPrice={selected[3]} description={selected[4]} details={selected[5]} location={selected[6]} image ={selected[7]} closeSelect ={closeSelect}/>
+                <NftDetails key={selected[0]} id={selected[0]} name={selected[1]} sale={selected[8]} rent = {selected[9]} price={selected[2]} rentPrice={selected[3]} description={selected[4]} details={selected[5]} location={selected[6]} image ={selected[7]} owner={selected[11]} closeSelect ={closeSelect}/>
             </div>
 
         

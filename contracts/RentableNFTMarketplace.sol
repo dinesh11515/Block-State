@@ -56,7 +56,6 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
     }
 
     function getMaticSpotPrice() external view returns(uint256) {
-    
       bytes memory _queryData = abi.encode("SpotPrice", abi.encode("matic", "usd"));
       bytes32 _queryId = keccak256(_queryData);
       
@@ -81,7 +80,7 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
       uint256 newTokenId = _tokenIds.current();
       _mint(msg.sender, newTokenId);
       tokenURIs[newTokenId] = _tokenURI;
-      createMarketItem(newTokenId, price, rent_price , forRent,forSale);
+      createMarketItem(newTokenId, price, rent_price , forRent, forSale);
     }
 
     function createMarketItem(
@@ -104,9 +103,7 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
         forSale,
         false
       );
-
       _transfer(msg.sender, address(this), tokenId);
-
       emit MarketItemCreated(
         tokenId,
         msg.sender,
@@ -139,13 +136,12 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
       ) public payable {
       uint price = idToMarketItem[tokenId].price;
       address seller = idToMarketItem[tokenId].seller;
-      require(msg.value >= price, "Please pay the asking price in order to complete the purchase");
+      require(msg.value>= price*(10**18), "Please pay the asking price in order to complete the purchase");
       idToMarketItem[tokenId].owner = payable(msg.sender);
       idToMarketItem[tokenId].sold = true;
       idToMarketItem[tokenId].seller = payable(address(0));
       _itemsSold.increment();
       _transfer(address(this), msg.sender, tokenId);
-      payable(owner).transfer(listingPrice);
       payable(seller).transfer(msg.value);
     }
 
@@ -156,7 +152,7 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
         require(idToMarketItem[_tokenId].forRent, "Token was not for renting");
         require(userOf(_tokenId) == address(0), "Token is already rented");
         uint rentPrice = idToMarketItem[_tokenId].rentPrice;
-        require(msg.value >= rentPrice,"pay the rent price");
+        require(msg.value>= rentPrice*(10**18) ,"pay the rent price");
         _setUser(_tokenId, msg.sender, _expires);
     }
 
@@ -177,6 +173,12 @@ contract RentableNFTMarketplace is ERC4907, UsingTellor{
         returns (string memory)
     {
         return string(abi.encodePacked(tokenURIs[_tokenId],"/metadata.json"));
+    }
+
+    function withdraw() public {
+      require(msg.sender == owner, "Only owner can withdraw");
+      uint balance = address(this).balance;
+      payable(msg.sender).transfer(balance);
     }
 
 }

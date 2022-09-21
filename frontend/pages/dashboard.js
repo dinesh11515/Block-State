@@ -15,7 +15,7 @@ export default function Dashboard() {
     }
     console.log(data.length)
     return (
-        <div className="pt-40 bg-black h-screen text-white px-40 flex justify-between">
+        <div className=" bg-black h-screen text-white px-40 flex justify-between">
             <div>
                 <div className="flex gap-10 items-center">
                     <h1>Get the TokenIds and Owner Details</h1>
