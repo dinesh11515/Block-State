@@ -23,7 +23,9 @@ const NavBar = (props) => {
         <Link href="/airdrop">
           <a className="hover:underline underline-offset-4">Airdrop</a>
         </Link>
-        <button className="p-2 pl-3 pr-3 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg">Become Member</button>
+        <Link href="/membership">
+          <a className="p-2 pl-3 pr-3 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg">Become Member</a>
+        </Link>
         <Link href="/buy">
           <a className="hover:underline underline-offset-4">BUY</a>
         </Link>

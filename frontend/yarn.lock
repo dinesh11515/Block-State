@@ -1054,23 +1054,23 @@
     "posthog-js-lite" "0.0.5"
     "qr-code-styling-new" "1.6.1"
 
-"@xmtp/proto@~3.0.0":
-  "integrity" "sha512-JJ2h+1SxzocSBnex5BN900HVglRyGC5M7eypl0rFpugVj4Q4//A67ZtB5rSul74MVRrypNbcYXRZRAwI8U9TBg=="
-  "resolved" "https://registry.npmjs.org/@xmtp/proto/-/proto-3.0.0.tgz"
-  "version" "3.0.0"
+"@xmtp/proto@^3.1.0":
+  "integrity" "sha512-eZDtCifowWEDYCPV7nSdDGlGO1TI6CsfOe7kP9sn8PECvNutYDk1NB7h+7neZLZoHQaO9U6vYrmhgJXVpaJEJw=="
+  "resolved" "https://registry.npmjs.org/@xmtp/proto/-/proto-3.1.0.tgz"
+  "version" "3.1.0"
   dependencies:
     "long" "^5.2.0"
     "protobufjs" "^7.0.0"
     "undici" "^5.8.1"
 
-"@xmtp/xmtp-js@^6.1.0":
-  "integrity" "sha512-ef5a0uAOlL7N+wVHCnF/XaTmI7XU6/3RFDuHVAN+e8anWrfpJaXcOpzRaECFmZ7+EWOfYtqjUqUEh2gsP7KPMQ=="
-  "resolved" "https://registry.npmjs.org/@xmtp/xmtp-js/-/xmtp-js-6.1.0.tgz"
-  "version" "6.1.0"
+"@xmtp/xmtp-js@^6.3.2":
+  "integrity" "sha512-hu5JL9rkdKobbgZSoAz+RG4V4nOZFFLMik9jx9kpY0gT9evq+V3tO2aegZJeYBxLTn4T3N8Kltm/aKmJ6tlowA=="
+  "resolved" "https://registry.npmjs.org/@xmtp/xmtp-js/-/xmtp-js-6.3.2.tgz"
+  "version" "6.3.2"
   dependencies:
     "@noble/secp256k1" "^1.5.2"
     "@stardazed/streams-polyfill" "^2.4.0"
-    "@xmtp/proto" "~3.0.0"
+    "@xmtp/proto" "^3.1.0"
     "ethers" "^5.5.3"
     "long" "^5.2.0"
     "node-localstorage" "^2.2.1"

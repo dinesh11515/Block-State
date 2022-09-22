@@ -7,6 +7,8 @@ import { defaultAbiCoder as abi } from "@ethersproject/abi";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { WidgetProps } from "@worldcoin/id";
+
 const WorldIDWidget = dynamic(
     () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
     { ssr: false }
@@ -17,6 +19,8 @@ export default function Airdrop() {
     const [contract,setContract] = useState();
     const [count , setCount] = useState(0);
     const [worldIDProof, setWorldIDProof] = useState(null);
+    const nftport_key = process.env.NEXT_PUBLIC_NFTPORT_KEY;
+
     const claimNft = async () => {
         try{
             await contract.callStatic.verify(worldIDProof.merkle_root,
@@ -35,7 +39,7 @@ export default function Airdrop() {
                 url: 'https://api.nftport.xyz/v0/mints/customizable',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: '690c665e-3868-4759-bc92-bd3f5a63ce92'
+                    Authorization: nftport_key
                 },
                 data: {
                     chain: 'polygon',

@@ -2,16 +2,21 @@ import { MdLocationOn } from 'react-icons/md';
 import { ImCross } from 'react-icons/im';
 import {FiSend} from 'react-icons/fi';
 import { BiMessageSquareDetail } from 'react-icons/bi';
-import { useContext,useState } from "react";
+import { useContext,useEffect,useState } from "react";
 import { stateContext } from "../context/stateContext";
 import { ethers, providers } from 'ethers';
 import { Client } from '@xmtp/xmtp-js'
 import { connect } from "@tableland/sdk";
+import Msg from './msg';
 
 export default function NftDetails(props){
     const {contract,connectWallet, connected,account,provider} = useContext(stateContext);
     const [open,setOpen] = useState(false);
+    const [xmtp,setXmtp] = useState(null);
+    const [conversation,setConversation] = useState(null);
     const owner = props.owner;
+    let [messages,setMessages] = useState([])
+    
     const buyNft = async () => {
         try{
             const tx = await contract.createMarketSale(props.id,{from:account,value:ethers.utils.parseEther(""+props.price)});
@@ -54,27 +59,40 @@ export default function NftDetails(props){
     const closeMsg = () => {
         setOpen(false);
     }
+    console.log(messages)
 
     const sendMsg = async () => {
         try{
-            const xmtp = await Client.create(provider);
-            const conversation = await xmtp.conversations.newConversation(
-                owner,
-              )
-            // const text = document.getElementById("msg").value;
-            // await conversation.send(text);
-            // //   // Listen for new messages in the conversation
-            // for await (const message of await conversation.streamMessages()) {
-            // console.log(`[${message.senderAddress}]: ${message.content}`)
-            // }
-            const messagesInConversation = await conversation.messages()
-            console.log(messagesInConversation)
+            const text = document.getElementById("msg").value;
+            await conversation.send(text);
+            setMessages([[text,account],...messages]);
+            for await (const message of await conversation.streamMessages()) {
+                setMessages([[message.content,message.senderAddress],...messages]);
+            }
         }
         catch(err){
             alert(err);
         }
     }
-
+    // console.log(owner)
+    const settingXmtp = async () => {
+        try{
+            const xmtp = await Client.create(provider);
+            setXmtp(xmtp);
+            const conversation = await xmtp.conversations.newConversation(
+                owner
+            )
+            setConversation(conversation);
+        }
+        catch(err){
+            alert(err);
+        }
+    }
+    useEffect(() => {
+        if(open && connected && xmtp == null){
+            settingXmtp();
+        }
+    },[connected,open])
 
     
     return (
@@ -88,11 +106,13 @@ export default function NftDetails(props){
                     <div className='flex flex-col justify-between h-128'>
                         <span> To :  {owner}</span>
                         <div className='h-96 flex '>
-                            <div>
-                                hi
-                            </div>
-                            <div>
-                                Hi
+                            <div className='flex flex-col-reverse gap-2'>
+                                {
+                                    messages.reverse().map((msg,index) => {
+                                        return <Msg key={index} owner={msg[1]} message={msg[0]}/>
+                                    }
+                                    )
+                                }
                             </div>
                         </div>
                         {

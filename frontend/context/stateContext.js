@@ -1,7 +1,7 @@
 import {createContext,useState} from 'react';
 import NavBar from '../components/Navbar';
 import {ethers} from 'ethers';
-import {abi,contract_address} from "../constants/index";
+import {abi,contract_address,erc721_abi,member_contract} from "../constants/index";
 import { SiweMessage } from 'siwe';
 export const stateContext = createContext();
 
@@ -12,7 +12,11 @@ export default function Layout({children}){
     const [contract,setContract] = useState(null);
     const [account,setAccount] = useState(null);
     const [owner,setOwner] = useState(false);
-    
+    const [member,setMember] = useState(false);
+    const [ownerAddress,setOwnerAddress] = useState(null);
+    const RPC = process.env.NEXT_PUBLIC_RPC;
+    const prov = new ethers.providers.JsonRpcProvider(RPC);
+    const erc721 = new ethers.Contract(member_contract,erc721_abi,prov);
     const networks = {
         mumbai: {
           chainId: `0x${Number(80001).toString(16)}`,
@@ -43,7 +47,6 @@ export default function Layout({children}){
 
     const connectWallet = async () => {
         try{
-            
             const provider = new ethers.providers.Web3Provider(window.ethereum);           
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner(account);
@@ -63,12 +66,14 @@ export default function Layout({children}){
             );
             await signer.signMessage(message);
             setProvider(signer);
-            const contract = new ethers.Contract(contract_address,abi,signer);
-            const ownerAddress = await contract.owner();
             const userAddress = await signer.getAddress();
-            setOwner(ownerAddress.toLowerCase()==userAddress.toLowerCase());
+            setMember(await erc721.balanceOf(userAddress) > 0);
+            const contract = new ethers.Contract(contract_address,abi,signer);
+            const ownerAdd = await contract.owner();
+            setOwner(ownerAdd.toLowerCase()==userAddress.toLowerCase());
             setContract(contract);
             setAccount(userAddress);
+            setOwnerAddress(ownerAdd);
             setConnected(true);
             
         }
@@ -91,7 +96,9 @@ export default function Layout({children}){
             connectWallet,
             disconnect,
             provider,
-            owner
+            owner,
+            ownerAddress,
+            member
         }}>
             <NavBar />
             {children}
