@@ -8,7 +8,7 @@ export default function NftCard(props){
                 <h1>{props.name}</h1>
                 <p>{props.price} MATIC</p>
             </div>
-            <div>
+            <div className='pl-1'>
                 {props.details}
             </div>
             <div className='flex items-center gap-2'>

@@ -11,6 +11,7 @@ export default function Membership() {
     const web3storage_key = process.env.NEXT_PUBLIC_WEB3_STORAGE_KEY;
     const nftport_key = process.env.NEXT_PUBLIC_NFTPORT_KEY;
     const [msg,setMsg] = useState("Join for 2 Matic");
+
     function makeFileObjects (data) {
         const obj = data;
         const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' })
@@ -20,7 +21,7 @@ export default function Membership() {
         ]
         return files
     }
-
+    //creating and storing the membership details of user in web3.storage
     const storeContent = async () => {
         let data = {"name":"Block State Pro Membership","image":"ipfs://QmeyFd24Z9G2RVRMtHoP8eEyAqBXGocHYCEYGvGhrRRHES"};
         data.user = account;
@@ -34,6 +35,7 @@ export default function Membership() {
         console.log(cid);
         return ("ipfs://"+cid);
     };
+    //minting a membership NFT for the user using NFTport
     const buyMembership = async () => {
         try{
             setMsg("Processing...");

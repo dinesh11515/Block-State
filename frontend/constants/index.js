@@ -964,10 +964,17 @@ export const abi =  [
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]
 
-export const contract_address = "0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71"
+export const contract_address = "0x72533b89C40E20Fe826Cdcb7cd095D132a1B090D"
 
 export const airdrop_contract = "0x6353362dB359978dF63775B8A1e08eB6A634cf86"
 

@@ -21,12 +21,12 @@ export default function Sell(){
     const [url,setUrl] = useState("");
     const sold = false;
     const NFT_STORAGE_KEY = process.env.NEXT_PUBLIC_NFT_STORAGE_KEY;
-    const {contract,connectWallet, connected,account} = useContext(stateContext);
+    const {contract,connectWallet, connected,account,member} = useContext(stateContext);
     const web3storage_key = process.env.NEXT_PUBLIC_WEB3_STORAGE_KEY;
 
     const [msg,setMsg] = useState("REGISTER PROPERTY");
-
-
+    
+    //uploading image to web3.storage for using in tableland
     const storeImage = async () => {
         try{
             const client = new Web3Storage({ token: web3storage_key });
@@ -38,7 +38,7 @@ export default function Sell(){
             alert(err);
         }
     };
-
+    //uploading metadata to nft.storage for using in creation of nft
     const StoreMetadata = async () => {
         try{
             const nft = {
@@ -54,12 +54,14 @@ export default function Sell(){
             };
             const client = new NFTStorage({ token: NFT_STORAGE_KEY });
             const metadata = await client.store(nft);
+            console.log(metadata);
             return metadata;
         }
         catch(err){
             alert(err);
         }
     };
+    //uploading metadata to tableland 
     const UploadDataIntoTableland = async (id,img_url) => {
         try{
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
@@ -74,16 +76,16 @@ export default function Sell(){
 
             // console.log(table_name);
             
-            const table_name = "blockstate_80001_2361";
+            const table_name = "blockstate_80001_2781";
             const writeRes = await tableland.write(`INSERT INTO ${table_name} VALUES ('${id}','${name}','${price}','${rentPrice}','${description}','${details}','${location}','${img_url}','${rent}','${sell}','${sold}','${account}');`);
-            
+            console.log(writeRes);
         }
         catch(err){
             alert(err);
         }
     }    
 
-    
+    //main function for uploading data and minting the rentable nft
     const upload = async () => {
         try {
             const id = ethers.BigNumber.from(await contract._tokenIds()).toNumber()+1;
@@ -94,8 +96,14 @@ export default function Sell(){
             setMsg("Uploading data to Tableland...")
             await UploadDataIntoTableland(id,img_url)
             setMsg("Minting...")
-            const tx = await contract.createToken(metadata.ipnft,price,rentPrice,sell,rent,true);
-            await tx.wait();
+            if(member){
+                const tx = await contract.createToken(metadata.ipnft,price,rentPrice,sell,rent,member);
+                await tx.wait();
+            }
+            else{
+                const tx = await contract.createToken(metadata.ipnft,price,rentPrice,sell,rent,member,{value : ethers.utils.parseEther("1")});
+                await tx.wait();
+            }
             setMsg("Registered Successfully");
             toast.success("Registered Successfully");
         } catch (err) {
@@ -242,22 +250,6 @@ export default function Sell(){
                             >
                         </input>
                     </div>
-                    {/* <div className="form-group form-check mb-6">
-                        <input
-                        type="file"
-                        accept=".png ,.jpeg,.jpg"
-                        onChange={(e) => setImg2(e.target.files[0])}
-                            >
-                        </input>
-                    </div>
-                    <div className="form-group form-check mb-6">
-                        <input
-                        type="file"
-                        accept=".png ,.jpeg,.jpg"
-                        onChange={(e) => setImg3(e.target.files[0])}
-                            >
-                        </input>
-                    </div> */}
                     <div className="form-group form-check mb-6">
                         <input type="checkbox"
                             className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain mr-2 cursor-pointer"

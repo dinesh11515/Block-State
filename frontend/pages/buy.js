@@ -17,8 +17,9 @@ export default function Buy(){
     const getData = async() => {
         try{
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2361"
-            const readRes = await tableland.read(`SELECT * FROM ${table_name} WHERE sale = "true";`);
+            const table_name = "blockstate_80001_2781"
+            const readRes = await tableland.read(`SELECT * FROM ${table_name} WHERE sale = "true" AND sold = "false";`);
+            console.log(readRes)
             setData(readRes["rows"]);
         }
 
@@ -30,7 +31,6 @@ export default function Buy(){
     useEffect(() => {
         getData();
     },[])
-    console.log(data)
     return(
         
             selected === null ?

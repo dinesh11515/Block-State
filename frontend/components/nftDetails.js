@@ -10,20 +10,21 @@ import { connect } from "@tableland/sdk";
 import Msg from './msg';
 
 export default function NftDetails(props){
-    const {contract,connectWallet, connected,account,provider} = useContext(stateContext);
+    const {contract,connectWallet, connected,account,provider,maticPrice} = useContext(stateContext);
     const [open,setOpen] = useState(false);
     const [xmtp,setXmtp] = useState(null);
     const [conversation,setConversation] = useState(null);
     const owner = props.owner;
     let [messages,setMessages] = useState([])
-    
+    const price = maticPrice == 0 ? 0.765 : maticPrice;
     const buyNft = async () => {
         try{
             const tx = await contract.createMarketSale(props.id,{from:account,value:ethers.utils.parseEther(""+props.price)});
             await tx.wait();
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2361";
-            const updateRes = await tableland.write(`UPDATE ${table_name} SET sold = "true" WHERE id = ${props.id};`);
+            const table_name = "blockstate_80001_2781";
+            const updateRes = await tableland.write(`UPDATE ${table_name} SET sold = 'true' WHERE id = ${props.id};`);
+            console.log(updateRes);
         }
         catch(err){
             alert(err);
@@ -32,14 +33,14 @@ export default function NftDetails(props){
 
     const rentNft = async () => {
         try{
-            // var date = new Date();
-            // date.setDate(date.getDate() + 30);
-            // const tx = await contract.rentOutToken(props.id,date.getDate(),{from:account,value:ethers.utils.parseEther(props.rentPrice+"")});
-            // await tx.wait();
-            const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2361";
-            // const grant = await tableland.write(`GRANT UPDATE ON ${table_name} TO '${account}';`);
-            const updateRes = await tableland.write(`UPDATE ${table_name} SET rent = "false" WHERE id = ${props.id};`);
+            var date = new Date();
+            date.setDate(date.getDate() + 30);
+            const tx = await contract.rentOutToken(props.id,date.getDate(),{from:account,value:ethers.utils.parseEther(props.rentPrice+"")});
+            await tx.wait();
+            const tableland = await connect({network: "testnet", chain: "polygon-mumbai" });
+            const table_name = "blockstate_80001_2781";
+            const updateRes = await tableland.write(`UPDATE ${table_name} SET rent = 'false' WHERE id = ${props.id};`);
+            console.log(updateRes);
         }
         catch(err){
             alert(err);
@@ -59,7 +60,7 @@ export default function NftDetails(props){
     const closeMsg = () => {
         setOpen(false);
     }
-    console.log(messages)
+    
 
     const sendMsg = async () => {
         try{
@@ -74,7 +75,6 @@ export default function NftDetails(props){
             alert(err);
         }
     }
-    // console.log(owner)
     const settingXmtp = async () => {
         try{
             const xmtp = await Client.create(provider);
@@ -129,9 +129,6 @@ export default function NftDetails(props){
                 </div>
                 :
                 <div className="text-white pt-4 px-40">
-                    {/* <div className="rounded-sm aspect-w-16 aspect-h-9">
-                        <iframe src="https://www.youtube.com/embed/7Qivx2om0MM" width="100%" height="315" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
-                    </div> */}
                     <div className='flex flex-row-reverse mt-2'>
                         <button className="bg-white p-2 rounded-md text-black" onClick={props.closeSelect}>Close</button>
                     </div>
@@ -156,7 +153,7 @@ export default function NftDetails(props){
                                         <div className='bg-zinc-800 p-2 rounded-md w-36'>
                                             <div className='text-zinc-400 text-sm'>price</div>
                                             <div>{props.price} MATIC</div>
-                                            <div className='text-zinc-400 text-md'>${props.price * 0.86}</div>
+                                            <div className='text-zinc-400 text-md'>${Math.round(props.price * price *10000)/10000}</div>
                                         </div>
                                     }
                                 </div>
@@ -166,7 +163,7 @@ export default function NftDetails(props){
                                         <div className='bg-zinc-800 p-2 rounded-md w-36'>
                                             <div className='text-zinc-400 text-sm'>rent price</div>
                                             <div>{props.rentPrice} MATIC</div>
-                                            <div className='text-zinc-400 text-md'>${props.rentPrice * 0.86}</div>
+                                            <div className='text-zinc-400 text-md'>${Math.round(props.rentPrice * price *10000)/10000}</div>
                                         </div>
                                     }
                                 </div>

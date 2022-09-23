@@ -14,6 +14,7 @@ export default function Layout({children}){
     const [owner,setOwner] = useState(false);
     const [member,setMember] = useState(false);
     const [ownerAddress,setOwnerAddress] = useState(null);
+    const [maticPrice,setMaticPrice] = useState(0);
     const RPC = process.env.NEXT_PUBLIC_RPC;
     const prov = new ethers.providers.JsonRpcProvider(RPC);
     const erc721 = new ethers.Contract(member_contract,erc721_abi,prov);
@@ -71,11 +72,13 @@ export default function Layout({children}){
             const contract = new ethers.Contract(contract_address,abi,signer);
             const ownerAdd = await contract.owner();
             setOwner(ownerAdd.toLowerCase()==userAddress.toLowerCase());
+            setConnected(true);
             setContract(contract);
             setAccount(userAddress);
             setOwnerAddress(ownerAdd);
-            setConnected(true);
-            
+            //Getting Spot price of MATIC Using Tellor Data Feed
+            const price = await contract.getMaticSpotPrice();
+            setMaticPrice(Number(price.toString().slice(0,5))/100000);
         }
         catch(err){
             alert(err.message);
@@ -98,7 +101,8 @@ export default function Layout({children}){
             provider,
             owner,
             ownerAddress,
-            member
+            member,
+            maticPrice
         }}>
             <NavBar />
             {children}
