@@ -1,40 +1,67 @@
 import { useState } from "react";
 export default function Dashboard() {
     const [data,setData] = useState([]);
-
-    const getDetails = async () => {
+    const covelentKey = process.env.NEXT_PUBLIC_COVALENT_KEY;
+    const getTokens = async () => {
         try{
-            const response = await fetch("https://api.covalenthq.com/v1/80001/tokens/0xd33bd6917a278e11cf812e5f3e29c132558e1edd/nft_transactions/1/?quote-currency=USD&format=JSON&key=ckey_4760467d5dde4c2f902585f848d");
+            const response = await fetch(`https://api.covalenthq.com/v1/80001/tokens/0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71/nft_token_ids/?quote-currency=USD&format=JSON&key=${covelentKey}`);
             const data = await response.json();
-            const len = data.data.items[0].nft_transactions.length;
-            setData(Object.entries(data.data.items[0].nft_transactions[len-1]));
+            console.log(data);
+            const len = data.data.items.length;
+            setData((len));
         }
         catch(err){
             alert(err);
         }
     }
-    console.log(data.length)
+
+    const getOwner = async () => {
+        try{
+            const id = document.getElementById("id").value;
+            const response = await fetch(`https://api.covalenthq.com/v1/80001/tokens/0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71/nft_metadata/${id}/?quote-currency=USD&format=JSON&key=${covelentKey}`);
+            const data = await response.json();
+            setData(data.data.items[0].nft_data[0].original_owner);
+        }
+        catch(err){
+            alert(err);
+        }
+    }
+
+    const getMetadata = async () => {
+        try{
+            const id = document.getElementById("token").value;
+            const response = await fetch(`https://api.covalenthq.com/v1/80001/tokens/0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71/nft_metadata/${id}/?quote-currency=USD&format=JSON&key=${covelentKey}`);
+            const data = await response.json();
+            setData(data.data.items[0].nft_data[0].token_url);
+        }
+        catch(err){
+            alert(err);
+        }
+    }
+
     return (
-        <div className=" bg-black h-screen text-white px-40 flex justify-between">
+        <div className=" bg-black text-white px-40 flex justify-between mt-20">
             <div>
-                <div className="flex gap-10 items-center">
-                    <h1>Get the TokenIds and Owner Details</h1>
-                    <button className="p-2 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg" onClick={getDetails}>GET</button>
+                <div className="flex flex-col gap-3">
+                    <h1 className="text-gray-300 text-xl">Get number of tokens minted</h1>
+                    <button className="p-2 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg w-32" onClick={getTokens}>GET</button>
                 </div>
-                <div>
-                    <h1>Get the Specific token Details</h1>
-                    <input type="text" placeholder="Enter the TokenId" />
-                    <button className="p-2 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg">GET</button>
+
+                <div className="flex flex-col gap-3 mt-4">
+                    <h1 className="text-gray-300 text-xl">Get owner of token</h1>
+                    <input type="text" placeholder="Enter the TokenId" className="focus:outline-none rounded-sm p-1 bg-gray-600 border-none" id="id"/>
+                    <button className="p-2 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg w-32" onClick={getOwner}>GET</button>
+                </div>
+                <div className="flex flex-col gap-3 mt-4">
+                    <h1 className="text-gray-300 text-xl">Get metadata of token</h1>
+                    <input type="text" placeholder="Enter the TokenId" className="focus:outline-none rounded-sm p-1 bg-gray-600 border-none" id="token"/>
+                    <button className="p-2 bg-blue-600 text-white rounded-md  hover:bg-blue-700 hover:shadow-lg w-32" onClick={getMetadata}>GET</button>
                 </div>
             </div>
-            <div className="bg-gray-600 w-1/2 h-5/6 rounded-md">
-                {/* {data.map((item) => {
-                    return <p>{item[0]}:{item[1]}</p>})} */}
-                {
-                    // for(let i=0;i<data.length;i++){
-                    //     <p>{data[i][0]}:{data[i][1]}</p>
-                    // }
-                }
+            <div className="bg-gray-600 w-1/2  rounded-md p-5 break-all">
+                
+                {data}
+                
             </div>
         </div>
     )

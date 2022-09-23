@@ -3,8 +3,9 @@ pragma solidity ^0.8.0;
 
 import { ByteHasher } from "./helpers/ByteHasher.sol";
 import { IWorldID } from "./interfaces/IWorldID.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract earlyAdoptersClaim {
+contract earlyAdoptersClaim is ERC721{
     using ByteHasher for bytes;
 
     error InvalidNullifier();
@@ -21,7 +22,7 @@ contract earlyAdoptersClaim {
     mapping(uint256 => bool) internal nullifierHashes;
     mapping (uint8 => address) public nftOwner;
 
-    constructor(IWorldID _worldId) {
+    constructor(IWorldID _worldId) ERC721("Block State Early Adoptors", "BSA"){
         worldId = _worldId;
     }
 
@@ -45,11 +46,18 @@ contract earlyAdoptersClaim {
 
         require(count < 20, "Only 20 NFTS available");
         count=count+1;
+        _mint(msg.sender, count);
         nftOwner[count] = msg.sender;
         
     }
 
     function getNftsLeft() public view returns (uint8) {
         return 20-count;
+    }
+
+    function tokenURI(uint256 _tokenId) public view override
+        returns (string memory)
+    {
+        return "ipfs://QmQ7okfvRjuwgBCM886SQ3SPdRDfjGtF2jSPWVR3qs15gU";
     }
 }

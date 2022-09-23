@@ -20,40 +20,41 @@ export default function Airdrop() {
     const [count , setCount] = useState(0);
     const [worldIDProof, setWorldIDProof] = useState(null);
     const nftport_key = process.env.NEXT_PUBLIC_NFTPORT_KEY;
-
+    // console.log(worldIDProof)
+    // console.log( abi.decode(["uint256[8]"], worldIDProof.proof))
     const claimNft = async () => {
         try{
-            await contract.callStatic.verify(worldIDProof.merkle_root,
-                worldIDProof.nullifier_hash,
-                abi.decode(["uint256[8]"], worldIDProof.proof)[0],
-                { gasLimit: 10000000 },
-            );
+            // await contract.callStatic.verify(worldIDProof.merkle_root,
+            //     worldIDProof.nullifier_hash,
+            //     abi.decode(["uint256[8]"], worldIDProof.proof)[0],
+            //     { gasLimit: 10000000 },
+            // );
             const tx = await contract.verify(worldIDProof.merkle_root,
                 worldIDProof.nullifier_hash,
                 abi.decode(["uint256[8]"], worldIDProof.proof)[0],
-                { gasLimit: 10000000 },
+                
             );
             await tx.wait();
-            const options = {
-                method: 'POST',
-                url: 'https://api.nftport.xyz/v0/mints/customizable',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: nftport_key
-                },
-                data: {
-                    chain: 'polygon',
-                    contract_address: '0x67e9828f1392883b740613422c00aef08e9ff5b1',
-                    metadata_uri: 'ipfs://QmQ7okfvRjuwgBCM886SQ3SPdRDfjGtF2jSPWVR3qs15gU',
-                    mint_to_address: account,
-                }
-            };
+            // const options = {
+            //     method: 'POST',
+            //     url: 'https://api.nftport.xyz/v0/mints/customizable',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         Authorization: nftport_key
+            //     },
+            //     data: {
+            //         chain: 'polygon',
+            //         contract_address: '0x67e9828f1392883b740613422c00aef08e9ff5b1',
+            //         metadata_uri: 'ipfs://QmQ7okfvRjuwgBCM886SQ3SPdRDfjGtF2jSPWVR3qs15gU',
+            //         mint_to_address: account,
+            //     }
+            // };
 
-            axios.request(options).then(function (response) {
-            console.log(response.data);
-            }).catch(function (error) {
-            console.error(error);
-            });
+            // axios.request(options).then(function (response) {
+            // console.log(response.data);
+            // }).catch(function (error) {
+            // console.error(error);
+            // });
             toast("Claimed Successfully");
         }
         catch(err){

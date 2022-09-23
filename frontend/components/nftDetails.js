@@ -38,7 +38,7 @@ export default function NftDetails(props){
             // await tx.wait();
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
             const table_name = "blockstate_80001_2361";
-            const grant = await tableland.write(`GRANT UPDATE ON ${table_name} TO '${account}';`);
+            // const grant = await tableland.write(`GRANT UPDATE ON ${table_name} TO '${account}';`);
             const updateRes = await tableland.write(`UPDATE ${table_name} SET rent = "false" WHERE id = ${props.id};`);
         }
         catch(err){

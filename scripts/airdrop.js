@@ -11,6 +11,7 @@ async function main() {
     await contract.deployed()
 
     console.log('Contract deployed to:', contract.address)
+    
 }
 
 main().catch(error => {
