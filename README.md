@@ -25,7 +25,7 @@ Block State is a NFT marketplace for buying, selling and renting the real estate
 -> Integrated world ID Protocol in claiming Airdrop NFT to ensure that user claimed the NFT only once. ([code link](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/airdrop.js)) ([contract link](https://mumbai.polygonscan.com/address/0x6353362dB359978dF63775B8A1e08eB6A634cf86))
 
 #### Tableland :
--> Uploaded the details and images of Properties to Tableland So that fast rendering and rendering without wallet connection make possible and even editing details in future if user want to. ([code 1](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/sell.js))
+-> Uploaded the details and images of Properties to Tableland So that fast rendering and makes possible rendering without wallet connection and even editing details in future if user want to. ([code 1](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/sell.js))
 ([code 2](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/buy.js))
 ([code 3](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/sell.js))
 

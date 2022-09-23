@@ -150,7 +150,7 @@ export default function NftDetails(props){
                                 <div className='flex justify-between gap-10'>
                                 <div>
                                     {
-                                        props.sale && 
+                                        props.sale=="true" && 
                                         <div className='bg-zinc-800 p-2 rounded-md w-36'>
                                             <div className='text-zinc-400 text-sm'>price</div>
                                             <div>{props.price} MATIC</div>
@@ -160,7 +160,7 @@ export default function NftDetails(props){
                                 </div>
                                 <div>
                                     {
-                                        props.rent &&
+                                        props.rent=="true" &&
                                         <div className='bg-zinc-800 p-2 rounded-md w-36'>
                                             <div className='text-zinc-400 text-sm'>rent price</div>
                                             <div>{props.rentPrice} MATIC</div>
@@ -173,8 +173,8 @@ export default function NftDetails(props){
                                 {
                                     connected ?
                                         <div className='flex justify-between'>
-                                            {props.sale && <button onClick={buyNft} className='mt-3 w-36 p-2 bg-white text-black rounded-2xl hover:bg-gray-100'>Buy</button>}
-                                            {props.rent && <button onClick={rentNft} className='mt-3 w-36 p-2 bg-white text-black rounded-2xl hover:bg-gray-100'>Rent</button>}
+                                            {props.sale == "true" && <button onClick={buyNft} className='mt-3 w-36 p-2 bg-white text-black rounded-2xl hover:bg-gray-100'>Buy</button>}
+                                            {props.rent == "true" && <button onClick={rentNft} className='mt-3 w-36 p-2 bg-white text-black rounded-2xl hover:bg-gray-100'>Rent</button>}
                                         </div>
                                     :
                                         <button className='mt-4 w-full p-2 bg-white text-black rounded-2xl hover:bg-gray-100' onClick={connectWallet}>Connect wallet</button>

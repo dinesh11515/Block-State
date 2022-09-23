@@ -28,6 +28,7 @@ export default function Buy(){
         }
     }
     
+    console.log(data);
     useEffect(() => {
         getData();
     },[])
@@ -43,7 +44,7 @@ export default function Buy(){
             :
 
             <div className="">
-                <NftDetails key={selected[0]} id={selected[0]} name={selected[1]} sale={selected[8]} rent = {selected[9]} price={selected[2]} rentPrice={selected[3]} description={selected[4]} details={selected[5]} location={selected[6]} image ={selected[7]} owner={selected[11]} closeSelect ={closeSelect}/>
+                <NftDetails key={selected[0]} id={selected[0]} name={selected[1]} sale={selected[9]} rent = {selected[8]} price={selected[2]} rentPrice={selected[3]} description={selected[4]} details={selected[5]} location={selected[6]} image ={selected[7]} owner={selected[11]} closeSelect ={closeSelect}/>
             </div>
 
         
