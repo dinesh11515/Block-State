@@ -43,6 +43,7 @@ export default function Membership() {
             const tx = await provider.sendTransaction({to:ownerAddress,value:ethers.utils.parseEther("2")});
             await tx.wait();
             setMsg("Minting NFT...");
+            //minting nft using NFTport
             const options = {
                 method: 'POST',
                 url: 'https://api.nftport.xyz/v0/mints/customizable',

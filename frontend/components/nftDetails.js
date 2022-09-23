@@ -61,7 +61,7 @@ export default function NftDetails(props){
         setOpen(false);
     }
     
-
+    //sending and loading the messages
     const sendMsg = async () => {
         try{
             const text = document.getElementById("msg").value;
@@ -75,6 +75,7 @@ export default function NftDetails(props){
             alert(err);
         }
     }
+    //setting up xmtp
     const settingXmtp = async () => {
         try{
             const xmtp = await Client.create(provider);

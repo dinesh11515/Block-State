@@ -13,7 +13,7 @@ export default function Buy(){
     const closeSelect = () => {
         setSelected(null);
     }
-
+    //getting data from tableland exceptialy the rent ones
     const getData = async() => {
         try{
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });

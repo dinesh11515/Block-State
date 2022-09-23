@@ -18,6 +18,8 @@ export default function Airdrop() {
     const [contract,setContract] = useState();
     const [count , setCount] = useState(0);
     const [worldIDProof, setWorldIDProof] = useState(null);
+
+    //claiming NFT by submitting world ID proofs
     const claimNft = async () => {
         try{
             await contract.callStatic.verify(worldIDProof.merkle_root,
@@ -28,7 +30,7 @@ export default function Airdrop() {
             const tx = await contract.verify(worldIDProof.merkle_root,
                 worldIDProof.nullifier_hash,
                 abi.decode(["uint256[8]"], worldIDProof.proof)[0],
-                
+                { gasLimit: 10000000 },
             );
             await tx.wait();
             toast("Claimed Successfully");

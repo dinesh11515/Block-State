@@ -2,6 +2,8 @@ import { useState } from "react";
 export default function Dashboard() {
     const [data,setData] = useState([]);
     const covelentKey = process.env.NEXT_PUBLIC_COVALENT_KEY;
+
+    //getting tokens minted using covalent api
     const getTokens = async () => {
         try{
             const response = await fetch(`https://api.covalenthq.com/v1/80001/tokens/0x3bEB0B90392FAf7832a3c1651Cbe978f15565D71/nft_token_ids/?quote-currency=USD&format=JSON&key=${covelentKey}`);
@@ -14,7 +16,7 @@ export default function Dashboard() {
             alert(err);
         }
     }
-
+    //getting the original owner of the token using covalent api
     const getOwner = async () => {
         try{
             const id = document.getElementById("id").value;
@@ -26,7 +28,7 @@ export default function Dashboard() {
             alert(err);
         }
     }
-
+    //getting metadata of the token using covalent api
     const getMetadata = async () => {
         try{
             const id = document.getElementById("token").value;
