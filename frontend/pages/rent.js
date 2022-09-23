@@ -17,7 +17,7 @@ export default function Buy(){
     const getData = async() => {
         try{
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2781"
+            const table_name = process.env.NEXT_PUBLIC_TABLE_NAME;
             const readRes = await tableland.read(`SELECT * FROM ${table_name} WHERE rent = "true" AND sold = "false";`);
             setData(readRes["rows"]);
         }

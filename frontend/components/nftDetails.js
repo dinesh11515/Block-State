@@ -22,7 +22,7 @@ export default function NftDetails(props){
             const tx = await contract.createMarketSale(props.id,{from:account,value:ethers.utils.parseEther(""+props.price)});
             await tx.wait();
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2781";
+            const table_name = process.env.NEXT_PUBLIC_TABLE_NAME;;
             const updateRes = await tableland.write(`UPDATE ${table_name} SET sold = 'true' WHERE id = ${props.id};`);
             console.log(updateRes);
         }
@@ -38,7 +38,7 @@ export default function NftDetails(props){
             const tx = await contract.rentOutToken(props.id,date.getDate(),{from:account,value:ethers.utils.parseEther(props.rentPrice+"")});
             await tx.wait();
             const tableland = await connect({network: "testnet", chain: "polygon-mumbai" });
-            const table_name = "blockstate_80001_2781";
+            const table_name = process.env.NEXT_PUBLIC_TABLE_NAME;;
             const updateRes = await tableland.write(`UPDATE ${table_name} SET rent = 'false' WHERE id = ${props.id};`);
             console.log(updateRes);
         }

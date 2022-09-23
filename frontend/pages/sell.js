@@ -76,7 +76,7 @@ export default function Sell(){
 
             // console.log(table_name);
             
-            const table_name = "blockstate_80001_2781";
+            const table_name = process.env.NEXT_PUBLIC_TABLE_NAME;
             const writeRes = await tableland.write(`INSERT INTO ${table_name} VALUES ('${id}','${name}','${price}','${rentPrice}','${description}','${details}','${location}','${img_url}','${rent}','${sell}','${sold}','${account}');`);
             console.log(writeRes);
         }
