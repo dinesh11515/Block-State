@@ -10,9 +10,9 @@ Block State is a NFT marketplace for buying, selling and renting the real estate
 
 #### IPFS & Filecoin :
 
--> Details and Images of Property was uploaded to IPFS by using Web3.Storage and NFT.Storage and used them as metadata for NFT.([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/sell.js))
+-> Details and Images of Property was uploaded to IPFS by using Web3.Storage and NFT.Storage and used them as metadata for NFT. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/sell.js))
 
--> Details of Membership like user address,bought date and time was uploaded to IPFS by using Web3.Storage.([code]("https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/membership.js))
+-> Details of Membership like user address,bought date and time was uploaded to IPFS by using Web3.Storage. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/membership.js))
 
 -> This project was hosted on Filecoin using Spheron.
 
@@ -33,7 +33,7 @@ Block State is a NFT marketplace for buying, selling and renting the real estate
 -> A simple XMTP chat feature was enabled to chat with owner for bargaining and getting more details of property. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/components/nftDetails.js))
 
 #### Tellor :
--> Used Tellor to get spot price of Matic. ([contract link](https://mumbai.polygonscan.com/address/0x72533b89C40E20Fe826Cdcb7cd095D132a1B090D#code))([tx hash](https://mumbai.polygonscan.com/tx/0xf083755765600027fd7fa52e3ae3f3aee457ac226adb872ec88398e1959b4b0d))
+-> Used Tellor to get spot price of Matic. ([contract link](https://mumbai.polygonscan.com/address/0x72533b89C40E20Fe826Cdcb7cd095D132a1B090D#code)) ([tx hash](https://mumbai.polygonscan.com/tx/0xf083755765600027fd7fa52e3ae3f3aee457ac226adb872ec88398e1959b4b0d))
 
 #### NFTPort :
 -> Used NFTPort API's for minting the nft's using customizable minting and deploying nft contract. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/membership.js))
