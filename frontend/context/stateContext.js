@@ -31,7 +31,7 @@ export default function Layout({children}){
           blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
         }
     }
-
+    // Siwe message creator for mumbai testnet
     function createSiweMessage(address, statement) {
         const domain = window.location.host;
         const origin = window.location.origin;
@@ -61,6 +61,7 @@ export default function Layout({children}){
                     ]
                 })
             }
+            //Sign in With Polygon
             const message = createSiweMessage(
                 await signer.getAddress(),
                 'Sign in with Polygon to the app.'

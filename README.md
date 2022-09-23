@@ -42,4 +42,7 @@ Block State is a NFT marketplace for buying, selling and renting the real estate
 -> Created a dashboard for owner using powerful Covalent API class A endpoint for getting details of tokens minted and owner,metadata of specific token. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/pages/dashboard.js))
 
 #### Valist :
--> Published this project using Valist protocol
+-> Published this project using Valist protocol.
+
+#### Spruce :
+-> Used the sign in with ethereum and modified it and made it like sign in with polygon. ([code](https://github.com/dinesh11515/Block-State/blob/main/frontend/context/stateContext.js))
