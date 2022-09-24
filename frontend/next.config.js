@@ -17,6 +17,11 @@ const nextConfig = {
       return config
   },
   trailingSlash: true,
+  experimental: {
+    images: {
+      unoptimized: true,
+    },
+  }
 }
 
 module.exports = nextConfig

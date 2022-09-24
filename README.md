@@ -1,6 +1,6 @@
 ## Block State
 
-Block State is a NFT marketplace for buying, selling and renting the real estate properties.This project was built by using ERC4907 standard which facilitates the efficient implementation of rentable NFTs.
+Block State is a NFT marketplace for buying, selling and renting the real estate properties.This project was built by using ERC4907 standard which facilitates the efficient implementation of rentable NFTs and technologies like IPFS, Polygon, Tableland, WorldCoin, Tellor , NFTPort and XMTP.
 
 [Live link](https://block-state-ye3pz4.spheron.app)
 
