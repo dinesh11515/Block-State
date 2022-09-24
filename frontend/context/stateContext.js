@@ -48,7 +48,7 @@ export default function Layout({children}){
 
     const connectWallet = async () => {
         try{
-            const provider = new ethers.providers.Web3Provider(window.ethereum);           
+            const provider = new ethers.providers.Web3Provider(window.ethereum,"any");           
             await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner(account);
             if(await signer.getChainId() != 80001){
