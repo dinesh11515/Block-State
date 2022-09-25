@@ -12,6 +12,7 @@ export default function Buy(){
 
     const closeSelect = () => {
         setSelected(null);
+        getData();
     }
     //getting data from tableland exceptialy the non sold ones
     const getData = async() => {
@@ -19,7 +20,6 @@ export default function Buy(){
             const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" });
             const table_name = process.env.NEXT_PUBLIC_TABLE_NAME;
             const readRes = await tableland.read(`SELECT * FROM ${table_name} WHERE sale = "true" AND sold = "false";`);
-            console.log(readRes)
             setData(readRes["rows"]);
         }
 
