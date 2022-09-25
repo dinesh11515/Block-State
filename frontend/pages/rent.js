@@ -36,7 +36,7 @@ export default function Buy(){
             
             <div className="grid grid-cols-4 gap-2 px-40 text-white mt-4">
                 {data.map((item) => {
-                    return(<NftCard key={item.id} item={item} name={item[1]} price={item[2]} details={item[5]} location={item[6]} image ={item[7]} clickSelect={clickSelect}/>)})}
+                    return(<NftCard key={item.id} item={item} name={item[1]} price={item[3]} details={item[5]} location={item[6]} image ={item[7]} clickSelect={clickSelect}/>)})}
             </div>
             
             :
