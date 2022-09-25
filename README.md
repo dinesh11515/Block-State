@@ -4,7 +4,17 @@ Block State is a NFT marketplace for buying, selling and renting the real estate
 
 [Live link](https://block-state-ye3pz4.spheron.app)
 
+[Valist link](https://bafybeihi5etl5u5eld2gecsukylskyzm4vcxtzjhn62qblb3yyjv4frc2q.ipfs.gateway.valist.io/)
+
 [Demo video]("")
+
+### Description
+
+This project contains separate pages for buying, Selling and Renting of Real Estate Properties. In selling page a seller can able to mint a new ERC721 rentable NFT by uploading the details of property. In buying page all the properties available for buying are listed.Respectively all the rentable properties are listed in Rent page. A simple wallet to wallet chat was also enabled in this project to chat with the owner of the property to get more details about property.
+
+### How It's Made
+This project was built by using  ERC4907 standard which facilitates the efficient implementation of rentable NFTs and technologies like  IPFS, Polygon, Tableland, WorldCoin, Tellor , NFTPort and XMTP. This project uploads the details of properties and images , membership details to IPFS using Web3.Storage and NFT.Storage. The whole project was hosted on Filecoin using Spheron. All the details are also uploaded to Tableland So that fast rendering and makes possible rendering without wallet connection  and even editing details in future if user want to. All the smart contracts are deployed on Polygon Blockchain. This project used the world ID protocol to ensure the adopters claimed the Early Adopters NFT's only once. A simple XMTP chat feature was enabled to chat with owner for bargaining and getting more details of property.This project uses Tellor to get spot price of Matic. This project uses NFTPort API's for minting NFT's to 
+users who bought the pro membership of BlockState. In this Project, a dashboard was created for owner using powerful Covalent API class A endpoint for getting details of tokens minted and owner,metadata of specific token.This project modifies the Spruce sign in with ethereum and made it like sign in with polygon.Finally this project was published using Valist.
 
 ### Technologies Used :
 
