@@ -2,6 +2,8 @@ import NftCard from "../components/nftCard"
 import NftDetails from "../components/nftDetails"
 import { connect } from "@tableland/sdk";
 import { useEffect, useState } from "react"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Buy(){
     const [selected,setSelected] = useState(null);
     const [data,setData] = useState([]);
